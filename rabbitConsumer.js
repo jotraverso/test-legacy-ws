@@ -18,6 +18,9 @@ amqp.connect(url, function(err, conn) {
             console.log(notif['EnterpriseUrl']);
             console.log(notif['PartnerUrl']);
             console.log(notif['Notification']);
+            console.log(notif['Notification'].Id);
+            console.log(notif['Notification'].Object.Id);
+
 
         }, { noAck: true });
     });
