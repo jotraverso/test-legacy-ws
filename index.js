@@ -58,7 +58,7 @@ var casePhaseChangeService = {
                     console.log(JSON.stringify(singleMessage));
                     rabbit
                         .default()
-                        .publish({ msg: JSON.stringify(args) }, { key: 'casePhaseNotificationQueue' })
+                        .publish(singleMessage, { key: 'casePhaseNotificationQueue' })
                         .on('drain', rabbit.close);
                 }
                 //Return  ACK to salesforce
