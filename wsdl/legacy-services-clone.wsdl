@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.Legacy.com" xmlns:ns="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.Legacy.com">
+    <wsdl:types>
+        <xs:schema xmlns:tns="http://www.Legacy.com" targetNamespace="http://www.Legacy.com">
+            <xs:element name="LegacyRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="param1" type="xs:string" minOccurs="0" />
+                        <xs:element name="param2" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="LegacyResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="DummyResult" type="xs:string" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="LegacyCloneRequest">
+        <wsdl:part name="CloneRequest" element="tns:LegacyRequest" />
+    </wsdl:message>
+    <wsdl:message name="LegacyCloneResponse">
+        <wsdl:part name="CloneResponse" element="tns:LegacyResponse" />
+    </wsdl:message>
+    <wsdl:portType name="LegacyPortType">
+        <wsdl:operation name="LegacyClone">
+            <wsdl:input message="tns:LegacyCloneRequest" />
+            <wsdl:output message="tns:LegacyCloneResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="LegacyBinding" type="tns:LegacyPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="LegacyClone">
+            <soap:operation soapAction="http://www.Legacy.com#LegacyClone" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="LegacyCloneService">
+        <wsdl:port name="LegacyPortType" binding="tns:LegacyBinding">
+            <soap:address location="https://legacy-ws.herokuapp.com/LegacyCloneService" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

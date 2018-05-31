@@ -44,7 +44,7 @@ xmlns:tns="http://www.Dummy.com"  xmlns:n="http://www.Dummy.com/Name/Types"  xml
 	</wsdl:binding>
 	<wsdl:service name="DummyService">
 		<wsdl:port name="DummyPortType" binding="tns:DummyBinding">
-			<soap:address location="http://www.Dummy.com/"/>
+			<soap:address location="https://legacy-ws.herokuapp.com/dummyService"/>
 		</wsdl:port>
 	</wsdl:service>
 </wsdl:definitions>
