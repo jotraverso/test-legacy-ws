@@ -11,10 +11,6 @@ var jackrabbit = require('jackrabbit');
 // Get the URL from ENV or default to localhost
 var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 
-
-
-console.log(JSON.stringify(legacyWS.LegacyCloneService));
-
 var outboundNotificationService = {
     NotificationService: {
         Notification: {
