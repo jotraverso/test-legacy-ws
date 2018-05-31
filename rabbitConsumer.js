@@ -9,18 +9,18 @@ amqp.connect(url, function(err, conn) {
         // ch.assertQueue(q, {durable: true});
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
         ch.consume(q, function(msg) {
-            console.log(" [x] Received %s", msg.content.toString());
-            var notif = JSON.parse(msg.content);
-            console.log(notif['OrganizationId'])
-            console.log(notif['OrganizationId']);
-            console.log(notif['ActionId']);
-            console.log(notif['SessionId']);
-            console.log(notif['EnterpriseUrl']);
-            console.log(notif['PartnerUrl']);
-            console.log(notif['Notification']);
-            console.log(notif['Notification'].Id);
-            console.log(notif['Notification'].Object.Id);
-
+        	var content = msg.content.toString();
+            console.log(" [x] Received %s", content);
+            var notif = JSON.parse(content);
+            console.log(notif.OrganizationId);
+            console.log(notif.ActionId);
+            console.log(notif.SessionId);
+            console.log(notif.EnterpriseUrl);
+            console.log(notif.PartnerUrl);
+            console.log(notif.Notification);
+            console.log(notif.Notification.Id);
+            console.log(notif.Notification.sObject.Id);
+            console.log(notif.Notification.sObject.Phase__c);
 
         }, { noAck: true });
     });

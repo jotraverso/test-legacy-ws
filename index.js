@@ -45,7 +45,7 @@ var casePhaseChangeService = {
             notifications: function(args, callback, headers, req) {
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
-                for(i in args['Notification']) {
+                for (i in args['Notification']) {
                     singleMessage = {
                         OrganizationId: args['OrganizationId'],
                         ActionId: args['ActionId'],
@@ -91,19 +91,3 @@ app.listen(PORT, function() {
     soap.listen(app, '/legacyCalculationsService', legacyWS.LegacyCalculationsService, legacyCalculationsServicesWsdl);
     soap.listen(app, '/legacySaveResultService', legacyWS.LegacySaveResultService, legacySaveResultServicesWsdl);
 });
-/*
-app.use(basicAuth({
-    users: {
-        'admin': 'supersecret'
-    },
-    challenge: true,
-    realm: 'heroku-test',
-}));
-
-app.get('/Node_Help_Sheet.pdf', function(req, res){
-  res.download('Node_Help_Sheet.pdf');
-});
-
-app.post('/Node_Help_Sheet.pdf', function(req, res){
-  res.download('Node_Help_Sheet.pdf');
-});*/
