@@ -33,7 +33,23 @@ var dummyService = {
 
 }
 
+var casePhaseChangeService = {
+    NotificationService: {
+        Notification: {
+            notifications: function(args, cb, headers, req) {
+                console.log('SOAP `reallyDetailedFunction` request from ' + req.connection.remoteAddress);
+                console.log('Hola sync:' + args);
+                return {
+                    Ack: true
+                };
+            }
+        }
+    }
+};
+
+
 var outboundNotificationWsdl = require('fs').readFileSync('wsdl/account-receiver.wsdl', 'utf8');
+var casePhaseChangeWsdl = require('fs').readFileSync('wsdl/casePhaseChange.wsdl','utf-8');
 var dummyWsdl = require('fs').readFileSync('wsdl/dummy.wsdl', 'utf8');
 
 var PORT = process.env.PORT ? process.env.PORT : 3000;
@@ -42,6 +58,7 @@ app.listen(PORT);
 console.log('server running on port ' + PORT);
 
 soap.listen(app, '/accountReceiver', outboundNotificationService, outboundNotificationWsdl);
+soap.listen(app, '/casePhaseChange', outboundNotificationService, casePhaseChangeWsdl);
 soap.listen(app, '/dummyService', dummyService, dummyWsdl);
 /*
 app.use(basicAuth({
