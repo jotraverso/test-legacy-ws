@@ -6,7 +6,7 @@ amqp.connect(url, function(err, conn) {
   conn.createChannel(function(err, ch) {
     var q = 'casePhaseNotificationQueue';
 
-    ch.assertQueue(q, {durable: false});
+    // ch.assertQueue(q, {durable: true});
     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
     ch.consume(q, function(msg) {
       console.log(" [x] Received %s", msg.content.toString());

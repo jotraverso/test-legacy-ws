@@ -43,14 +43,25 @@ var casePhaseChangeService = {
     NotificationService: {
         Notification: {
             notifications: function(args, callback, headers, req) {
-                console.log('SOAP `reallyDetailedFunction` request from ' + req.connection.remoteAddress);
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
                 var rabbit = jackrabbit(url);
-                rabbit
-                    .default()
-                    .publish({ msg: JSON.stringify(args) }, { key: 'casePhaseNotificationQueue' })
-                    .on('drain', rabbit.close);
+                for(i in args['Notification']) {
+                    singleMessage = {
+                        OrganizationId: args['OrganizationId'],
+                        ActionId: args['ActionId'],
+                        SessionId: args['SessionId'],
+                        EnterpriseUrl: args['EnterpriseUrl'],
+                        PartnerUrl: args['PartnerUrl'],
+                        Notification: args['Notification'][i],
+                    };
+                    console.log(JSON.stringify(singleMessage));
+                    rabbit
+                        .default()
+                        .publish({ msg: JSON.stringify(args) }, { key: 'casePhaseNotificationQueue' })
+                        .on('drain', rabbit.close);
+                }
+                //Return  ACK to salesforce
                 return {
                     Ack: true
                 };
