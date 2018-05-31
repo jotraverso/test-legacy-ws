@@ -46,14 +46,14 @@ var casePhaseChangeService = {
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
                 var rabbit = jackrabbit(url);
-                for(notification in args['Notification']) {
+                for(i in args['Notification']) {
                     singleMessage = {
                         OrganizationId: args['OrganizationId'],
                         ActionId: args['ActionId'],
                         SessionId: args['SessionId'],
                         EnterpriseUrl: args['EnterpriseUrl'],
                         PartnerUrl: args['PartnerUrl'],
-                        Notifications: notification
+                        Notifications: args['Notification'][i],
                     };
                     console.log(JSON.stringify(singleMessage));
                     rabbit
