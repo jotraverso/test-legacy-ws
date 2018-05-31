@@ -45,7 +45,6 @@ var casePhaseChangeService = {
             notifications: function(args, callback, headers, req) {
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
-                var rabbit = jackrabbit(url);
                 for(i in args['Notification']) {
                     singleMessage = {
                         OrganizationId: args['OrganizationId'],
@@ -56,11 +55,12 @@ var casePhaseChangeService = {
                         Notification: args['Notification'][i],
                     };
                     console.log(JSON.stringify(singleMessage));
+                    var rabbit = jackrabbit(url);
                     rabbit
                         .default()
                         .publish(singleMessage, { key: 'casePhaseNotificationQueue' })
+                        .on('drain', rabbit.close);
                 }
-                rabbit.close();
                 //Return  ACK to salesforce
                 return {
                     Ack: true
