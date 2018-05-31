@@ -45,7 +45,7 @@ var casePhaseChangeService = {
             notifications: function(args, callback, headers, req) {
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
-                // var rabbit = jackrabbit(url);
+                var rabbit = jackrabbit(url);
                 for(notification in args['Notification']) {
                     singleMessage = {
                         OrganizationId: args['OrganizationId'],
