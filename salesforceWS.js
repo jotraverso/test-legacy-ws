@@ -32,7 +32,36 @@ var SalesforceWS = function() {
                 }
             });
         });
-    }
+    };
+    self.callToValidationsCaseWS = function(notif) {
+        soap.createClient('./remote-wsdl/ValidationsCaseWS.wsdl', function(err, client) {
+            var legacyWS = new LegacyWebServices();
+            var result = legacyWS.LegacyValidations({
+                param1: notif.Notification.sObject.Id,
+                param2: JSON.stringify(notif.Notification.sObject),
+            });
+            client.addSoapHeader({ SessionHeader: { sessionId: notif.SessionId } }, '', 'tns', '');
+            var partnerURL = notif.PartnerUrl;
+            var serviceUrl = '/services/Soap/class/ValidationsCaseWS';
+            var salesforceHost = partnerURL.substr(0, partnerURL.indexOf('/services/Soap'));
+            client.setEndpoint(salesforceHost + serviceUrl);
+            client.caseAnalysisResult({
+                result: {
+                    analyzeResult: result.DummyResult,
+                    caseId: notif.Notification.sObject.Id,
+                    error: 'false',
+                    errorMessage: '',
+                    returnCode: '00',
+                }
+            }, function(error, result, raw) {
+                console.log('Request Done: ' + JSON.stringify(result));
+                if (error && result.statusCode != 200) {
+                    console.log('Error en la peticion: ' + result.statusCode + '\n' +
+                        'Request: ' + result.request.body + '\nResponse: ' + raw);
+                }
+            });
+        });
+    };
 };
 module.exports = SalesforceWS;
 /*
