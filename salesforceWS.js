@@ -45,7 +45,7 @@ var SalesforceWS = function() {
             var serviceUrl = '/services/Soap/class/ValidationsCaseWS';
             var salesforceHost = partnerURL.substr(0, partnerURL.indexOf('/services/Soap'));
             client.setEndpoint(salesforceHost + serviceUrl);
-            client.caseAnalysisResult({
+            client.caseValidationsResult({
                 result: {
                     analyzeResult: result.DummyResult,
                     caseId: notif.Notification.sObject.Id,
