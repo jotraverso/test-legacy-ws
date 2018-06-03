@@ -7,7 +7,8 @@ var Sentencer = require('sentencer');
 var LegacyWebServices = require('./legacy-services.js');
 var app = express();
 //publisher.js
-var jackrabbit = require('jackrabbit');
+// var jackrabbit = require('jackrabbit');
+var amqp = require('amqplib/callback_api');
 // Get the URL from ENV or default to localhost
 var url = process.env.CLOUDAMQP_URL || "amqp://localhost";
 
@@ -43,24 +44,31 @@ var casePhaseChangeService = {
     NotificationService: {
         Notification: {
             notifications: function(args, callback, headers, req) {
+                amqp.connect(url, function(err, conn) {
+                    conn.createChannel(function(err, ch) {
+                        var q = 'casePhaseNotificationQueue';
+                        for (i in args['Notification']) {
+                            singleMessage = {
+                                OrganizationId: args['OrganizationId'],
+                                ActionId: args['ActionId'],
+                                SessionId: args['SessionId'],
+                                EnterpriseUrl: args['EnterpriseUrl'],
+                                PartnerUrl: args['PartnerUrl'],
+                                Notification: args['Notification'][i],
+                            };
+                            console.log(JSON.stringify(singleMessage));
+                            ch.sendToQueue(q, singleMessage);
+                        }                        
+                    });
+                });
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
-                for (i in args['Notification']) {
-                    singleMessage = {
-                        OrganizationId: args['OrganizationId'],
-                        ActionId: args['ActionId'],
-                        SessionId: args['SessionId'],
-                        EnterpriseUrl: args['EnterpriseUrl'],
-                        PartnerUrl: args['PartnerUrl'],
-                        Notification: args['Notification'][i],
-                    };
-                    console.log(JSON.stringify(singleMessage));
-                    var rabbit = jackrabbit(url);
-                    rabbit
-                        .default()
-                        .publish(singleMessage, { key: 'casePhaseNotificationQueue' })
-                        .on('drain', rabbit.close);
-                }
+
+                /*var rabbit = jackrabbit(url);
+                rabbit
+                    .default()
+                    .publish(singleMessage, { key: 'casePhaseNotificationQueue' })
+                    .on('drain', rabbit.close);*/
                 //Return  ACK to salesforce
                 return {
                     Ack: true
