@@ -58,8 +58,10 @@ var casePhaseChangeService = {
                             };
                             console.log(JSON.stringify(singleMessage));
                             ch.sendToQueue(q, new Buffer(JSON.stringify(singleMessage)));
-                        }                        
+                        }
+                        setTimeout(function() { conn.close(); }, 500);                      
                     });
+
                 });
                 console.log('Hola sync:' + JSON.stringify(args));
                 // Connect to CloudAMQP
