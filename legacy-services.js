@@ -16,7 +16,8 @@ var LegacyWebServices = function() {
     self.LegacyValidations = function(args, callback, headers, req) {
         // console.log('SOAP `LegacyValidations` request from ' + req.connection.remoteAddress);
         // console.log('Hola sync LegacyValidations:' + args);
-        var sentence = Sentencer.make('The Case Number ' + args['param1'] + ' validations has been {{adjective}} executed');
+        var caseObj = JSON.parse(args.param2);
+        var sentence = Sentencer.make('The Case Number ' + caseObj.CasNumber + ' validations has been {{adjective}} executed');
         console.log(sentence);
         return {
             DummyResult: sentence
@@ -25,7 +26,8 @@ var LegacyWebServices = function() {
     self.LegacyCalculations = function(args, callback, headers, req) {
         // console.log('SOAP `LegacyCalculations` request from ' + req.connection.remoteAddress);
         // console.log('Hola sync LegacyCalculations:' + args);
-        var sentence = Sentencer.make('The Case Number ' + args['param1'] + ' calculations has been {{adjective}} executed, take this {{adjective}} result');
+        var caseObj = JSON.parse(args.param2);
+        var sentence = Sentencer.make('The Case Number ' + caseObj.CasNumber + ' calculations has been {{adjective}} executed, take this {{adjective}} result');
         console.log(sentence);
         return {
             DummyResult: sentence
@@ -34,7 +36,8 @@ var LegacyWebServices = function() {
     self.LegacySaveResult = function(args, callback, headers, req) {
         // console.log('SOAP `LegacySaveResult` request from ' + req);
         // console.log('Hola sync LegacySaveResult:' + args);
-        var sentence = Sentencer.make('The Case Number ' + args['param1'] + ' salesforce result has been {{adjective}} saved at the legacy system');
+        var caseObj = JSON.parse(args.param2);
+        var sentence = Sentencer.make('The Case Number ' + caseObj.CasNumber + ' salesforce result has been {{adjective}} saved at the legacy system');
         console.log(sentence);
         return {
             DummyResult: sentence
