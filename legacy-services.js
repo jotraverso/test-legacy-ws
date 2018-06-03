@@ -6,7 +6,8 @@ var LegacyWebServices = function() {
         // console.log('SOAP `LegacyClone` request from ' + req.connection.remoteAddress);
         // console.log('Hola sync LegacyClone:' + JSON.stringify(args));
         // console.log(req);
-        var sentence = Sentencer.make('The Case Number ' + args['param1'] + ' is {{adjective}} cloned at legacy system');
+        var caseObj = JSON.parse(args.param2);
+        var sentence = Sentencer.make('The Case Number ' + caseObj.CaseNumber + ' is {{adjective}} cloned at legacy system');
         console.log(sentence);
         return {
             DummyResult: sentence
