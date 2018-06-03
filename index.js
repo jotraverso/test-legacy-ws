@@ -57,7 +57,7 @@ var casePhaseChangeService = {
                                 Notification: args['Notification'][i],
                             };
                             console.log(JSON.stringify(singleMessage));
-                            ch.sendToQueue(q, new Buffer(singleMessage));
+                            ch.sendToQueue(q, new Buffer(JSON.stringify(singleMessage)));
                         }                        
                     });
                 });
