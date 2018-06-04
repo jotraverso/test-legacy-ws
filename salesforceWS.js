@@ -98,12 +98,13 @@ var SalesforceWS = function() {
         soap.createClient('./remote-wsdl/SaveResultsWS.wsdl', function(err, client) {
             var legacyWS = new LegacyWebServices();
             var isSuccess = true;
+            var result;
             try {
-                var result = legacyWS.LegacySaveResult({
+                result = legacyWS.LegacySaveResult({
                     param1: notif.Notification.sObject.Id,
                     param2: JSON.stringify(notif.Notification.sObject),
                 });
-            } cath(ex) {
+            } catch(ex) {
                 isSuccess = false;
             }
             client.addSoapHeader({ SessionHeader: { sessionId: notif.SessionId } }, '', 'tns', '');
