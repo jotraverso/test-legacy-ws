@@ -1,5 +1,6 @@
 var http = require('http');
 var soap = require('soap');
+var Sentencer = require('sentencer');
 const express = require('express');
 var LegacyWebServices = require('./legacy-services.js');
 var SalesforceWS = function() {
@@ -52,6 +53,73 @@ var SalesforceWS = function() {
                     error: 'false',
                     errorMessage: '',
                     returnCode: '00',
+                }
+            }, function(error, result, raw) {
+                console.log('Request Done: ' + JSON.stringify(result));
+                if (error && result.statusCode != 200) {
+                    console.log('Error en la peticion: ' + result.statusCode + '\n' +
+                        'Request: ' + result.request.body + '\nResponse: ' + raw);
+                }
+            });
+        });
+    };
+    self.callToCaseCalculationsResultWS = function(notif) {
+        soap.createClient('./remote-wsdl/CalculationsCaseWS.wsdl', function(err, client) {
+            var legacyWS = new LegacyWebServices();
+            var result = legacyWS.LegacyCalculations({
+                param1: notif.Notification.sObject.Id,
+                param2: JSON.stringify(notif.Notification.sObject),
+            });
+            client.addSoapHeader({ SessionHeader: { sessionId: notif.SessionId } }, '', 'tns', '');
+            var partnerURL = notif.PartnerUrl;
+            var serviceUrl = '/services/Soap/class/CalculationsCaseWS';
+            var salesforceHost = partnerURL.substr(0, partnerURL.indexOf('/services/Soap'));
+            client.setEndpoint(salesforceHost + serviceUrl);
+            var isSuccess = Math.random() <= 0.95;
+            var rndErrorMessage = isSuccess ? '' : Sentencer.make('The results saving for Case Number ' + caseObj.CaseNumber + ' is {{adjective}} failed');
+            client.caseCalculationsResult({
+                result: {
+                    analyzeResult: result.DummyResult,
+                    caseId: notif.Notification.sObject.Id,
+                    error: isSuccess ? 'false' : 'true',
+                    errorMessage: rndErrorMessage,
+                    returnCode: isSuccess ? '00' : ('' + Math.floor(Math.random() * 90 + 10)),
+                }
+            }, function(error, result, raw) {
+                console.log('Request Done: ' + JSON.stringify(result));
+                if (error && result.statusCode != 200) {
+                    console.log('Error en la peticion: ' + result.statusCode + '\n' +
+                        'Request: ' + result.request.body + '\nResponse: ' + raw);
+                }
+            });
+        });
+    };
+    self.callToCaseSaveResultWS = function(notif) {
+        soap.createClient('./remote-wsdl/SaveResultsWS.wsdl', function(err, client) {
+            var legacyWS = new LegacyWebServices();
+            var isSuccess = true;
+            try {
+                var result = legacyWS.LegacySaveResult({
+                    param1: notif.Notification.sObject.Id,
+                    param2: JSON.stringify(notif.Notification.sObject),
+                });
+            } cath(ex) {
+                isSuccess = false;
+            }
+            client.addSoapHeader({ SessionHeader: { sessionId: notif.SessionId } }, '', 'tns', '');
+            var partnerURL = notif.PartnerUrl;
+            var serviceUrl = '/services/Soap/class/SaveResultsWS';
+            var salesforceHost = partnerURL.substr(0, partnerURL.indexOf('/services/Soap'));
+            client.setEndpoint(salesforceHost + serviceUrl);
+
+            var rndErrorMessage = isSuccess ? '' : Sentencer.make('The results saving for Case Number ' + caseObj.CaseNumber + ' is {{adjective}} failed');
+            client.caseSaveResults({
+                result: {
+                    analyzeResult: isSuccess ? result.DummyResult : '',
+                    caseId: notif.Notification.sObject.Id,
+                    error: isSuccess ? 'false' : 'true',
+                    errorMessage: rndErrorMessage,
+                    returnCode: isSuccess ? '00' : ('' + Math.floor(Math.random() * 90 + 10)),
                 }
             }, function(error, result, raw) {
                 console.log('Request Done: ' + JSON.stringify(result));

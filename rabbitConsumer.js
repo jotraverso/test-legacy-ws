@@ -33,7 +33,9 @@ amqp.connect(url, function(err, conn) {
                     break;
                 case 'Calculations':
                     break;
-                case 'SaveResult':
+                case 'SaveResults':
+                    var sfdcws = new SalesforceWS();
+                    sfdcws.callToCaseSaveResultWS(notif);
                     break;
             }
         }, { noAck: true });

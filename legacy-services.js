@@ -39,6 +39,20 @@ var LegacyWebServices = function() {
         var caseObj = JSON.parse(args.param2);
         var sentence = Sentencer.make('The Case Number ' + caseObj.CaseNumber + ' salesforce result has been {{adjective}} saved at the legacy system');
         console.log(sentence);
+
+        var isSuccess = Math.random() <= 0.95;
+        if (!isSuccess) {
+            throw {
+                Fault: {
+                    Code: {
+                        Value: 'soap:Sender',
+                        Subcode: { value: 'rpc:BadArguments' }
+                    },
+                    Reason: { Text: 'Processing Error' },
+                    statusCode: 500
+                }
+            };
+        }
         return {
             DummyResult: sentence
         };
