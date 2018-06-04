@@ -113,7 +113,7 @@ var SalesforceWS = function() {
             var salesforceHost = partnerURL.substr(0, partnerURL.indexOf('/services/Soap'));
             client.setEndpoint(salesforceHost + serviceUrl);
 
-            var rndErrorMessage = isSuccess ? '' : Sentencer.make('The results saving for Case Number ' + caseObj.CaseNumber + ' is {{adjective}} failed');
+            var rndErrorMessage = isSuccess ? '' : Sentencer.make('The results saving for Case Number ' + notif.Notification.sObject.CaseNumber + ' is {{adjective}} failed');
             client.caseSaveResults({
                 result: {
                     analyzeResult: isSuccess ? result.DummyResult : '',
