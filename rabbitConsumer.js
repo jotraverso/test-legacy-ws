@@ -32,6 +32,8 @@ amqp.connect(url, function(err, conn) {
                     sfdcws.callToValidationsCaseWS(notif);
                     break;
                 case 'Calculations':
+                    var sfdcws = new SalesforceWS();
+                    sfdcws.callToCaseCalculationsResultWS(notif);
                     break;
                 case 'SaveResults':
                     var sfdcws = new SalesforceWS();
